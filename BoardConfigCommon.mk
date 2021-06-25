@@ -31,16 +31,13 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := kryo385
+TARGET_CPU_VARIANT := kryo300
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := $(TARGET_ARCH_VARIANT)
+TARGET_2ND_ARCH_VARIANT := armv8-2a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
-TARGET_2ND_CPU_VARIANT_RUNTIME := $(TARGET_CPU_VARIANT_RUNTIME)
-
+TARGET_2ND_CPU_VARIANT := cortex-a75
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
@@ -50,46 +47,27 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := \
-    androidboot.console=ttyMSM0 \
-    androidboot.hardware=qcom \
-    androidboot.memcg=1 \
-    androidboot.usbcontroller=a600000.dwc3 \
-    cgroup.memory=nokmem,nosocket \
-    console=ttyMSM0,115200n8 \
-    earlycon=msm_geni_serial,0xa90000 \
-    lpm_levels.sleep_disabled=1 \
-    msm_rtb.filter=0x237 \
-    reboot=panic_warm \
-    service_locator.enable=1 \
-    swiotlb=2048 \
-    video=vfb:640x400,bpp=32,memsize=3072000
-BOARD_KERNEL_IMAGE_NAME := Image.gz
-BOARD_KERNEL_PAGESIZE := 4096
-BOARD_BOOT_HEADER_VERSION := 2
-BOARD_KERNEL_BASE          := 0x00000000
-BOARD_KERNEL_TAGS_OFFSET   := 0x00000100
-BOARD_KERNEL_OFFSET        := 0x00008000
-BOARD_KERNEL_SECOND_OFFSET := 0x00f00000
-BOARD_RAMDISK_OFFSET       := 0x01000000
-BOARD_DTB_OFFSET           := 0x01f00000
-TARGET_KERNEL_ARCH := $(TARGET_ARCH)
-TARGET_NO_KERNEL := false
-BOARD_INCLUDE_RECOVERY_DTBO := true
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
-BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
-BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --second_offset $(BOARD_KERNEL_SECOND_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
+KERNEL_LD := LD=ld.lld
+BOARD_BOOT_HEADER_VERSION := 3
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=0 firmware_class.path=/vendor/firmware loop.max_part=7 cgroup.memory=nokmem,nosocket pcie_ports=compat loop.max_part=7 iptable_raw.raw_before_defrag=1 ip6table_raw.raw_before_defrag=1
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_KERNEL_BASE := 0x00000000
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
+BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_COMPILE_WITH_MSM_KERNEL := true
+TARGET_KERNEL_CONFIG := vendor/rog5_defconfig
+TARGET_KERNEL_SOURCE := kernel/asus/sm8350
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_KERNEL_SEPARATED_DTBO := true
+TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/linux-x86/dtc/dtc
 
 # Platform
 TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno650
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno660
 TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
 QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 

@@ -63,8 +63,8 @@ if [ "$device" = "I002D" ]; then
 	log_print 2 "ZenFone 7/7 Pro detected. Removing ASUS Firmware support from twrp.flags..."
 	remove_line $fstab "/asusfw"
 	finish
-elif [ "$device" = "I003D" ]; then
-	log_print 2 "ROG Phone 3 detected. Removing SD Card support from twrp.flags..."
+elif [ "$device" = "I005D" ]; then
+	log_print 2 "ROG Phone 5 detected. Removing SD Card support from twrp.flags..."
 	remove_line $fstab "/external_sd"
 	finish
 else
